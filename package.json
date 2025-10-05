@@ -14,7 +14,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "app": "swa start",
+    "deploy": "swa build && swa deploy",
+    "backend:install": "uv sync --all-groups",
+    "backend:test": "uv run pytest -q"
   },
   "eslintConfig": {
     "extends": "react-app"
