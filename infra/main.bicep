@@ -8,6 +8,9 @@ var tableName = 'todos'
 resource swa 'Microsoft.Web/staticSites@2024-11-01' = {
   name: swaName
   location: location
+  sku: {
+    name: 'Free'
+  }
   properties: {
     buildProperties: {
       appLocation: '/'
