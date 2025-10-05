@@ -35,3 +35,35 @@ Examples:
 This provisions:
 - Azure Static Web App (backend under `/api`)
 - Azure Storage account with a `todos` Table
+
+## Backend (API) with uv
+
+The Python backend lives in `api/` and targets Python 3.13. Use uv to manage dependencies and run tests.
+
+### Prereqs
+- Python 3.13 available on your machine
+- uv installed
+
+Install uv (one-time):
+
+```zsh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# or, with Homebrew
+brew install uv
+```
+
+### Setup and tests
+From the repo root:
+
+```zsh
+cd api
+# Create/refresh the virtual env from pyproject + uv.lock
+uv sync
+
+# Run unit tests
+uv run pytest -q
+```
+
+Notes:
+- The POST endpoint requires `AzureWebJobsStorage` to be set. Infra deployment wires this in Azure; for local experiments, export a Storage connection string.
+- Azure builds can use `requirements.txt` directly; uv is for local dev convenience.
