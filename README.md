@@ -2,7 +2,7 @@
 
 ## Requirements
 - Add new todo items
-- View all todo items
+- View all todo items (newest first)
 - Persist data across sessions
 
 ### Out of scope:
