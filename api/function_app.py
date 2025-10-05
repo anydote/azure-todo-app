@@ -56,6 +56,14 @@ def get_todos(req: func.HttpRequest) -> func.HttpResponse:
             d["id"] = d["RowKey"]
             items.append(d)
 
+        def parse_created_at(item):
+            try:
+                return datetime.fromisoformat(item["createdAt"])
+            except Exception:
+                return datetime.min
+
+        items.sort(key=parse_created_at, reverse=True)
+
         return func.HttpResponse(
             json.dumps(items),
             status_code=200,
