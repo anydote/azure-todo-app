@@ -28,6 +28,7 @@ ENV/
 .pytest_cache/
 .coverage
 .tox/
+.python_packages/
 
 # React/Node ignores
 node_modules/
@@ -54,3 +55,4 @@ yarn-error.log*
 
 # Azure Static Web Apps
 .azure/
+__blobstorage__/
