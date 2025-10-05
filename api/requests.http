@@ -1,0 +1,11 @@
+# List all todos
+GET http://localhost:7071/api/todos
+
+###
+# Add a new todo
+POST http://localhost:7071/api/todos
+Content-Type: application/json
+
+{
+  "title": "Another one"
+}
