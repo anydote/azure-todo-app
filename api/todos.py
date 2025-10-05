@@ -27,8 +27,48 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="/todos", methods=["GET"])
 def get_todos(req: func.HttpRequest) -> func.HttpResponse:
-    # TODO: Fetch all todos from storage
-    return func.HttpResponse("[TODO] List all todos", mimetype="application/json")
+    try:
+        import json
+        from azure.data.tables import TableServiceClient
+
+        # Get connection string from environment
+        conn_str = os.environ.get("AzureWebJobsStorage")
+        if not conn_str:
+            return func.HttpResponse(
+                json.dumps({"error": "Missing AzureWebJobsStorage env var"}),
+                status_code=500,
+                mimetype="application/json",
+            )
+
+        # Connect to Table Storage
+        table_service = TableServiceClient.from_connection_string(conn_str)
+        table_client = table_service.get_table_client(table_name="todos")
+
+        # Query all todo entities
+        items = []
+        for entity in table_client.query_entities("PartitionKey eq 'todos'"):
+            d = {
+                "PartitionKey": entity.get("PartitionKey"),
+                "RowKey": entity.get("RowKey"),
+                "title": entity.get("title"),
+                "createdAt": entity.get("createdAt"),
+            }
+            d["id"] = d["RowKey"]
+            items.append(d)
+
+        return func.HttpResponse(
+            json.dumps(items),
+            status_code=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        import json
+
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=400,
+            mimetype="application/json",
+        )
 
 
 @app.route(route="/todos", methods=["POST"])
@@ -62,6 +102,64 @@ def add_todo(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="application/json",
         )
     except Exception as e:
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=400,
+            mimetype="application/json",
+        )
+
+
+@app.route(route="/todos/{id}", methods=["GET"])
+def get_todo(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        import json
+        from azure.data.tables import TableServiceClient
+        from azure.core.exceptions import ResourceNotFoundError
+
+        todo_id = req.route_params.get("id")
+        if not todo_id:
+            return func.HttpResponse(
+                json.dumps({"error": "Missing id in route"}),
+                status_code=400,
+                mimetype="application/json",
+            )
+
+        conn_str = os.environ.get("AzureWebJobsStorage")
+        if not conn_str:
+            return func.HttpResponse(
+                json.dumps({"error": "Missing AzureWebJobsStorage env var"}),
+                status_code=500,
+                mimetype="application/json",
+            )
+
+        table_service = TableServiceClient.from_connection_string(conn_str)
+        table_client = table_service.get_table_client(table_name="todos")
+
+        try:
+            entity = table_client.get_entity(partition_key="todos", row_key=todo_id)
+        except ResourceNotFoundError:
+            return func.HttpResponse(
+                json.dumps({"error": "Todo not found"}),
+                status_code=404,
+                mimetype="application/json",
+            )
+
+        d = {
+            "PartitionKey": entity.get("PartitionKey"),
+            "RowKey": entity.get("RowKey"),
+            "title": entity.get("title"),
+            "createdAt": entity.get("createdAt"),
+        }
+        d["id"] = d["RowKey"]
+
+        return func.HttpResponse(
+            json.dumps(d),
+            status_code=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        import json
+
         return func.HttpResponse(
             json.dumps({"error": str(e)}),
             status_code=400,
