@@ -1,6 +1,6 @@
 import os
 import pytest
-from api.todos import TodoItem
+from api.function_app import TodoItem
 
 
 def test_todoitem_fields():

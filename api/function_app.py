@@ -25,7 +25,7 @@ class TodoItem(BaseModel):
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 
-@app.route(route="/todos", methods=["GET"])
+@app.route(route="todos", methods=["GET"])
 def get_todos(req: func.HttpRequest) -> func.HttpResponse:
     try:
         import json
@@ -71,7 +71,7 @@ def get_todos(req: func.HttpRequest) -> func.HttpResponse:
         )
 
 
-@app.route(route="/todos", methods=["POST"])
+@app.route(route="todos", methods=["POST"])
 def add_todo(req: func.HttpRequest) -> func.HttpResponse:
     try:
         import json
@@ -109,7 +109,7 @@ def add_todo(req: func.HttpRequest) -> func.HttpResponse:
         )
 
 
-@app.route(route="/todos/{id}", methods=["GET"])
+@app.route(route="todos/{id}", methods=["GET"])
 def get_todo(req: func.HttpRequest) -> func.HttpResponse:
     try:
         import json
