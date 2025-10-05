@@ -22,19 +22,6 @@ fi
 LOCATION=${LOCATION_ARG:-westeurope}
 NAME_PREFIX=${NAME_PREFIX_ARG:-todo}
 
-
-# Emit requirements.txt from uv.lock using uv (if available)
-if command -v uv >/dev/null 2>&1; then
-  if [ -d "api" ]; then
-    echo "Emitting requirements.txt from uv.lock using uv..."
-    (cd api && uv pip freeze > requirements.txt)
-  else
-    echo "Warning: api directory not found, skipping requirements.txt emission."
-  fi
-else
-  echo "Warning: uv not found, skipping requirements.txt emission."
-fi
-
 BICEP_FILE="infra/main.bicep"
 
 # Create RG if it doesn't exist
