@@ -1,23 +1,25 @@
 import os
-from pydantic import BaseModel, Field, constr
-from typing import Literal
 import uuid
 from datetime import datetime
 import azure.functions as func
 
 
-class TodoItem(BaseModel):
-    PartitionKey: Literal["todos"] = Field(default="todos")
-    RowKey: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    title: constr(max_length=200)
-    createdAt: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+from dataclasses import dataclass, field, asdict
+
+
+@dataclass
+class TodoItem:
+    PartitionKey: str = field(default="todos", init=False)
+    RowKey: str = field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = field(default="")
+    createdAt: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
     @property
     def id(self) -> str:
         return self.RowKey
 
     def to_dict(self):
-        d = self.dict()
+        d = asdict(self)
         d["id"] = self.id
         return d
 

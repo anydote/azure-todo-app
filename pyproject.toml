@@ -6,8 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.12"
 dependencies = [
     "azure-data-tables>=12.7.0",
-    "azure-functions>=1.23.0",
-    "pydantic>=2.11.10",
+    "azure-functions>=1.23.0"
 ]
 
 [dependency-groups]
