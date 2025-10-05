@@ -38,10 +38,13 @@ This provisions:
 
 ## Backend (API) with uv
 
-The Python backend lives in `api/` and targets Python 3.13. Use uv to manage dependencies and run tests.
+
+The Python backend lives in `api/`.
+Project dependencies and lockfile (`pyproject.toml`, `uv.lock`) are now in the repo root.
+Use uv to manage dependencies and run tests.
 
 ### Prereqs
-- Python 3.13 available on your machine
+- Python 3.10 or 3.11 available on your machine
 - uv installed
 
 Install uv (one-time):
@@ -56,7 +59,6 @@ brew install uv
 From the repo root:
 
 ```zsh
-cd api
 # Create/refresh the virtual env from pyproject + uv.lock
 uv sync
 
@@ -66,4 +68,4 @@ uv run pytest -q
 
 Notes:
 - The POST endpoint requires `AzureWebJobsStorage` to be set. Infra deployment wires this in Azure; for local experiments, export a Storage connection string.
-- Azure builds can use `requirements.txt` directly; uv is for local dev convenience.
+- Azure builds can use `api/requirements.txt` directly; uv is for local dev convenience.
