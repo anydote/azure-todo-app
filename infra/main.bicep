@@ -1,5 +1,3 @@
-// Minimal infra: Static Web App + Storage Table
-
 param location string = resourceGroup().location
 param namePrefix string = 'todo'
 
