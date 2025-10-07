@@ -47,6 +47,11 @@ Install backend dependencies:
 npm run backend:install
 ```
 
+Install git hooks (optional but recommended):
+```zsh
+uv run pre-commit install
+```
+
 
 ### Running locally
 From the repo root:
@@ -61,6 +66,11 @@ This will automatically start both the frontend and backend, and proxy API reque
 From the repo root:
 ```zsh
 npm run backend:test
+```
+
+Run all pre-commit hooks manually:
+```zsh
+uv run pre-commit run --all-files
 ```
 
 ---
